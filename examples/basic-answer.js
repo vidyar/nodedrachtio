@@ -13,7 +13,7 @@ app.connect( function(err){
 
 app.invite(function(req, res) {
 
-   req.on('cancel', function(){
+   req.cancel(function(creq, cres){
         debug('caller hung up') ;
     }) ;
 
@@ -34,23 +34,18 @@ app.invite(function(req, res) {
         
 	res.send(180) ;
     
-    res.set('User-Agent', 'drachtio') 
-    .send(200, {
+    res.send(200, {
         headers: {
             'Content-Type': 'application/sdp'
         }
         ,body: sdp
-    }, function( err, ack, dlg ) {
-        if( err ) throw( err ) ;
+    }, function( ack, dlg ) {
+        //if( err ) throw( err ) ;
  
         debug('dialog was connected: ',  dlg) ;
 
-        dlg.on('terminated', dialogTerminated) ;
-        dlg.on('refreshed', dialogRefreshed); 
-        dlg.on('modified', dialogModified) ;
-
         setTimeout( function(){
-            dlg.terminate( function(req,res){
+            dlg.request('bye', function(req,res){
                 debug('received a response to our BYE message with status: ', res.statusCode) ;
                 debug('cseq on our BYE was: ', req.headers['cseq'] ) ;
             }) ;
@@ -58,18 +53,6 @@ app.invite(function(req, res) {
     }) ;
 
  }) ;
-
-
-function dialogTerminated( reason ) {
-    debug('dialog was terminated with reason %s', reason) ;
-}
-function dialogModified( oldDialog ) {
-    debug('dialog was modified') ;    
-}
-function dialogRefreshed() {
-    debug('dialog was refreshed') ;    
-}
-
 
 
 

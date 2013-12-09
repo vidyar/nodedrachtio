@@ -13,9 +13,7 @@ app.connect( function(err){
 
 app.invite(function(req, res) {
 
-   req.on('cancel', function() {
-        debug('caller hung up') ;
-    }) ;
+    session = new Session() ;
    
     setTimeout( function() {
         res.send(500) ;
@@ -27,7 +25,11 @@ app.invite(function(req, res) {
 app.cancel(function(req,res){
     debug('received a cancel') ;
     res.send(200) ;
+
+    session.end() ; 
 }) ;
 
 
+session.on('end', function(){
 
+})

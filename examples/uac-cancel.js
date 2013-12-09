@@ -31,7 +31,7 @@ function test() {
         'a=fmtp:101 0-15\n' + 
         'a=sendrecv\n' ;
 
-    siprequest('sip:1234@localhost:33616',{
+    var r = siprequest('sip:1234@localhost:33616',{
         headers:{
             'content-type': 'application/sdp'
         },
@@ -61,6 +61,11 @@ function test() {
         }
 
     }) ;
+
+    /* cancel after two seconds */
+    setTimeout( function() {
+        r.cancelRequest() ;
+    }, 3000) ;
 }
 
 
