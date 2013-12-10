@@ -1,43 +1,38 @@
 var app = require('../..')()
 ,siprequest = app.uac
 ,_=require('underscore')
-,debug = require('debug')('drachtio:example-basic-answer') ;
+,config = require('../test-config')
+,debug = require('debug')('drachtio:msml-basic-connect') ;
 
- app.set('port', 8022) ;
- app.set('host', 'localhost') ;
- app.set('secret', 'cymru') ;
- app.set('mrcf', 'msml') ;
- 
- var uacDlg, uasDlg ;
+var uacDlg, uasDlg ;
 
-app.connect( function(err){
-	if( err ) console.log("Error connecting: " + err) ;
-}) ;
-
+app.connect( config, function() { debug('connected');} ) ;
 
 app.invite(function(req, res) {
+
+    /* connect incoming call to the media server */
 
     siprequest('sip:msml@192.168.173.139',{
         headers:{
             'content-type': 'application/sdp'
         },
         body: req.body
-    }, function( mreq, mres ) {
+    }, function( err, mreq, mres ) {
 
        if( mres.statusCode === 200 ) {
 
-            mres.ack(function(dlg) {
-                dlg.on('terminated', dialogTerminated) ;
+            mres.ack(function(err, dlg) {
+                dlg.bye( onDialogBye) ;
                 uacDlg = dlg ;
             }) ;
 
-            res.send( 200, {
+            req.active && res.send( 200, {
                 headers: {
                     'content-type': 'application/sdp'
                 }
                 ,body: mres.body
             }, function( err, ack, dlg ) {
-                dlg.on('terminated', dialogTerminated) ;
+                dlg.bye( onDialogBye) ;
                 uasDlg = dlg ;
             }) ;
         }
@@ -47,14 +42,11 @@ app.invite(function(req, res) {
     }) ;
 }) ;
 
-function dialogTerminated( reason ) {
-    debug('dialog was terminated with reason %s', reason) ;
-    if( this === uacDlg ) {
-        uasDlg.terminate() ;
-    }
-    else {
-        uacDlg.terminate() ;
-    }
+function onDialogBye( req, res ) {
+    res.send(200) ;
+
+    /* one side hung up - terminate the other side as well */
+    (this === uacDlg ? uasDlg : uacDlg).request('bye') ;
 }
 
 

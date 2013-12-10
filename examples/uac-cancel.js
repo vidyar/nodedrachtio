@@ -1,20 +1,13 @@
 var app = require('..')()
 ,siprequest = app.uac
-,debug = require('debug')('drachtio:example-basic-uac') ;
-
-app.set('port', 8022) ;
-app.set('host', 'localhost') ;
-app.set('secret', 'cymru') ;
-app.set('mrcf', 'msml') ;
+,config = require('./test-config')
+,debug = require('debug')('drachtio:example-uac-cancel') ;
  
-app.connect( function(err){
-	if( err ) throw err ;
+app.connect( config ) ;
 
-    test() ;
+app.once( 'connect', function() {
 
-}) ;
-
-function test() {
+    /* initiate an outdial, and then cancel it */
 
     var sdp = 'v=0\n' +
         'o=- 1385064302543926 1 IN IP4 127.0.0.1\n' + 
@@ -31,41 +24,38 @@ function test() {
         'a=fmtp:101 0-15\n' + 
         'a=sendrecv\n' ;
 
-    var r = siprequest('sip:1234@localhost:33616',{
+    var r = siprequest('sip:1234@localhost:14804',{
         headers:{
             'content-type': 'application/sdp'
         },
         body: sdp
     }, function( req, res ) {
-        /* note: 
-            req - representation of the actual request that was sent, can also be used to cancel the request, or examine any headers
-            res - respponse
-        */
-        /* note: right now, error handling has to be done in middleware due to router requiring an arity of 4 if you want to handle errors */
 
-        debug('via on req is ', res.get('via') ) ;
         debug('status is ', res.statusCode ) ;
 
         if( res.statusCode === 200 ) {
-            res.ack(function(dlg) {
-                debug('got dialog: ', dlg) ;
-
-                setTimeout( function() {
-                    debug('releasing dialog from our side') ;
-                    dlg.request('bye', function(req,res){
-                        debug('sent a %s', req.method) ;
-                        debug('got status %s on response', res.statusCode) ;
-                    }); 
-                }, 5000) ;
+            res.ack(function(err, dlg) {
+               if( err ) {
+                    console.error('error sending invite: ' + err ) ;
+                    app.disconnect() ;
+                    return ;        
+                }
+                dlg.bye( onDialogBye ) ;
             }) ;
         }
 
     }) ;
 
-    /* cancel after two seconds */
+    /* cancel after three seconds */
     setTimeout( function() {
         r.cancelRequest() ;
     }, 3000) ;
+
+}) ;
+
+function onDialogBye( req, res ) {
+    debug('called party hung up') ;
+    res.send(200) ;
 }
 
 

@@ -1,57 +1,58 @@
 var app = require('../..')()
 ,siprequest = app.uac
 ,_=require('underscore')
-,debug = require('debug')('drachtio:example-basic-play') ;
+,config = require('../test-config')
+,debug = require('debug')('drachtio:msml-basic-connect') ;
 
- app.set('port', 8022) ;
- app.set('host', 'localhost') ;
- app.set('secret', 'cymru') ;
- app.set('mrcf', 'msml') ;
- 
- var uacDlg, uasDlg ;
+var uacDlg, uasDlg ;
 
-app.connect( function(err){
-	if( err ) console.log("Error connecting: " + err) ;
-}) ;
-
+app.connect( config, function() { debug('connected');} ) ;
 
 app.invite(function(req, res) {
 
-    siprequest('sip:msml@192.168.173.139',{
+    var r = siprequest('sip:msml@192.168.173.139',{
         headers:{
             'content-type': 'application/sdp'
         },
         body: req.body
-    }, function( mreq, mres ) {
+    }, function( err, mreq, mres ) {
 
        if( mres.statusCode === 200 ) {
 
-            mres.ack(function(dlg) {
+            mres.ack(function(err, dlg) {
 
                 dlg.info(onDialogInfo) ;
                 dlg.bye(onDialogBye) ;
 
                 uacDlg = dlg ;
+
             }) ;
 
-            res.send( 200, {
+            req.active && res.send( 200, {
                 headers: {
                     'content-type': 'application/sdp'
                 }
                 ,body: mres.body
             }
-            ,function( ack, dlg ) {
+            ,function( err, ack, dlg ) {
                 dlg.bye(onDialogBye) ;
                 uasDlg = dlg ;
 
                 playFile() ;
 
             }) ;
-        }
+         }
         else if( mres.statusCode > 200 ) {
             res.send( mres.status.code, mres.status.phrase ) ;
         }
     }) ;
+
+    /* if caller hangs up while we're connecting him, cancel our outbound request as well */
+   req.cancel( function( creq, cres ){
+        r.cancelRequest() ;
+        cres.send(200) ;    
+    }) ;
+
 }) ;
 
 function playFile() {
@@ -81,7 +82,7 @@ function playFile() {
             'content-type': ' application/msml+xml'
         }
         ,body: body
-    }, function( req, res ){
+    }, function( err, req, res ){
         debug('response to info message was: ', res.statusCode) ;
     }) ;
 }
@@ -91,22 +92,7 @@ function onDialogInfo( req, res ) {
     res.send(200) ;
 }
 function onDialogBye( req, res ) {
-    if( this === uasDlg ) {
-        debug('received BYE on uas leg ') ;
-        debug('uas times: ', this.times)
-        debug('uas local: ', this.local)
-        debug('uas remote: ', this.remote)
-    
-        uacDlg.request('bye',function() {
-            debug('uac leg is now terminated') ;
-            debug('uac times: ', this.times)
-            debug('uac local: ', this.local)
-            debug('uac remote: ', this.remote)
-        }); 
-    }
-    else {
-        uasDlg.request('bye') ;
-    }
+    (this === uacDlg ? uasDlg : uacDlg).request('bye') ;
 }
 
 

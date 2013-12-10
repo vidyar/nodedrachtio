@@ -1,15 +1,9 @@
 var app = require('..')()
-,debug = require('debug')('drachtio:example-basic-answer') ;
-
- app.set('port', 8022) ;
- app.set('host', 'localhost') ;
- app.set('secret', 'cymru') ;
- app.set('mrcf', 'msml') ;
+,siprequest = app.uac
+,config = require('./test-config')
+,debug = require('debug')('drachtio:example-basic-uac') ;
  
-app.connect( function(err){
-	if( err ) console.log("Error connecting: " + err) ;
-}) ;
-
+app.connect( config ) ;
 
 app.invite(function(req, res) {
 
@@ -39,21 +33,30 @@ app.invite(function(req, res) {
             'Content-Type': 'application/sdp'
         }
         ,body: sdp
-    }, function( ack, dlg ) {
-        //if( err ) throw( err ) ;
+    }, function( err, ack, dlg ) {
+
+        if( err ) {
+            console.error('error sending 200 OK to INVITE, ' + err) ;
+            app.disconnect() ;
+            return ;
+        }
  
         debug('dialog was connected: ',  dlg) ;
 
+        dlg.bye(onDialogBye) ;
+
         setTimeout( function(){
-            dlg.request('bye', function(req,res){
-                debug('received a response to our BYE message with status: ', res.statusCode) ;
-                debug('cseq on our BYE was: ', req.headers['cseq'] ) ;
-            }) ;
+            dlg.request('bye'/*, function(req,res){}*/) ;
         }, 3000)
     }) ;
 
  }) ;
 
+
+function onDialogBye( req, res ) {
+    debug('caller hungup') ;
+    res.send(200) ;
+}
 
 
 
