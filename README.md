@@ -1,6 +1,6 @@
 # drachtio-client
 
-drachtio-client is an application framework designed to let developers easily integrate [SIP](http://www.ietf.org/rfc/rfc3261.txt) call and media processing features into their applications.  It acts as a client to the [dractio](https://github.com/davehorton/drachtio) server platform, and offers express-style middleware for managing SIP requests.
+drachtio-client is an application framework designed to let developers easily integrate [SIP](http://www.ietf.org/rfc/rfc3261.txt) call and media processing features into their applications.  It acts as a client to the [dractio](https://github.com/davehorton/drachtio) server platform, and offers [express](http://expressjs.com/)-style middleware for managing SIP requests.
 
 ###### Current status: early stage development/integration
 
@@ -52,7 +52,7 @@ Note that a Content-Length header is calculated automatically for you, so it is 
 
 ### User Agent Server / User Agent Client
 
-It is possible to build applications that act as a User Agent Server (UAS), or User Agent Client (UAC), or combine both in order to build a Back-to-Back User Agent (B2BUA) application.  We already saw examples of a UAC application above -- a SIP UAC is an application that generates outgoing SIP requests, whereas a SIP UAS is an application that receives incoming SIP requests.  Receiving incoming SIP requests is done using app.VERB style of functions, as will be familiar to those who have used express:
+It is possible to build applications that act as a User Agent Server (UAS), or User Agent Client (UAC), or combine both in order to build a Back-to-Back User Agent (B2BUA) application.  We already saw examples of a UAC application above -- a SIP UAC is an application that generates outgoing SIP requests, whereas a SIP UAS is an application that receives incoming SIP requests.  Receiving incoming SIP requests is done using express-style app.VERB style:
 
 ```js
 //connect as before...
