@@ -58,7 +58,7 @@ It is possible to build applications that act as a User Agent Server (UAS), or U
 //connect as before...
 app.register( function(req, res) {
     var expires = parseInt( req.get('contact').expires || req.get('expires').delta ) ;
-    console.log('got a REGISTER register with expires seconds of', expires) ;
+    console.log('got a REGISTER request asking for a registration interval of ' + expires + ' seconds') ;
     res.send(200) ;
 }) ;
 
@@ -82,21 +82,21 @@ app.use('register', drachtio.digestAuth('dracht.io', function( realm, user, fn) 
 
 app.register( function(req, res) {
     var expires = parseInt( req.get('contact').expires || req.get('expires').delta ) ;
-    debug('got an authenticated register with expires seconds %d', expires) ;
+    console.log('got a register request from an authenticated user with expires seconds ', expires) ;
     res.send(200) ;
 }) ;
 ```
-Now our app-level register route will only receive REGISTER requests that have been challenged and authenticated.  Incoming requests without credentials in an Authorization header will be rejected with a 401 and WWW-Authenticate header by the drachtio.digestAuth middleware, greatly simplifying the application.
+Now our app-level register route will only receive REGISTER requests that have been challenged and authenticated.  Incoming requests without credentials in an Authorization header will be rejected with a 401 and WWW-Authenticate header by the drachtio.digestAuth middleware, greatly simplifying the application.  Of course, you can add your own middleware in addition to the packaged SIP middleware that comes bundled with drachtio-client.
 
 ### Creating SIP Dialogs
-Besides exchanging SIP requests and responses, your application can also create SIP dialogs by sending or receiving INVITEs.  A SIP dialog represents a long-lived connection between two endpoints over which media of some form is exchanged.  The SIP dialog is formed by means of the SIP INVITE request.  Once a dialog is formed, the application uses the dialog object to control and terminate the connection. This is done by using methods on the SipDialog object, and by establishing dialog-level routes to receive requests within a dialog.
+Besides exchanging SIP requests and responses, your application can also create SIP dialogs by sending or receiving INVITEs.  A SIP dialog represents a long-lived connection between two endpoints over which media of some type is exchanged.  The SIP dialog is formed by means of the SIP INVITE request.  Once a dialog is formed, the application uses the dialog object to control and terminate the connection. This is done by using methods on the SipDialog object, and by establishing dialog-level routes (as opposed to application-level routes) to receive requests within a dialog.
 
 Here is an example of a UAS application that establishes a dialog:
 ```js
 app.invite(function(req, res) {
 
    req.cancel(function(creq, cres){
-        debug('the calling party hung up before we answered') ;
+        console.log('the calling party hung up before we answered') ;
     }) ;
 
  	var sdp ; //populate as appropriate
@@ -116,16 +116,17 @@ app.invite(function(req, res) {
  
         console.log('SIP dialog has been established') ;
 
+		//establish a dialog-level route to handle incoming BYE requests on this dialog
         dlg.bye(onDialogBye) ;
     }) ;
  }) ;
 
 function onDialogBye( req, res ) {
-    debug('calling party hungup after we answered') ;
+    console.log('calling party hungup after we answered') ;
     res.send(200) ;
 }
 ```
-Establishing a dialog as a UAC is shown below:
+Establishing a dialog as a UAC is also possible:
 ```js
 var drachtio = require('drachtio')
 ,app = drachtio()
@@ -168,10 +169,18 @@ app.once('connect', function() {
 }) ;
 
 function onDialogBye( req, res ) {
-    debug('called party hung up') ;
+    console.log('called party hung up') ;
     res.send(200) ;
 }
 ```
+### SIP Header Parsing
+Note that headers are already pre-parsed for you in incoming requests, making it easy to retrieve specific information elements
+```js
+app.invite(function(req, res) {
+	console.log('remote tag on the incoming INVITE is ' + req.get('from').tag ) ;
+	console.log('calling party number on the incoming INVITE is ' + req.get('from').url.user) ;
+```
+
 ## Documentation
 
 TBD
