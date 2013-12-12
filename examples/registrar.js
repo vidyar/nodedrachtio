@@ -7,10 +7,9 @@ var drachtio = require('..')
 app.connect( config ) ;
 
 app.use('register', drachtio.digestAuth('dracht.io', function( realm, user, fn) {
+    //return 'foobar' as password
     fn( null, 'foobar') ;
 })) ;
-
-//app.use('register', drachtio.digestAuth) ;
 
 app.register( function(req, res) {
     var expires = parseInt( req.get('contact').expires || req.get('expires').delta ) ;
