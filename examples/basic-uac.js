@@ -3,7 +3,11 @@ var app = require('..')()
 ,config = require('./test-config')
 ,debug = require('debug')('drachtio:example-basic-uac') ;
  
-app.connect( config ) ;
+app.connect( {
+    host: 'localhost'
+    ,port: 8023
+    ,secret: 'cymru'
+}) ;
 
 app.once('connect', function() {
 
@@ -22,9 +26,11 @@ app.once('connect', function() {
         'a=fmtp:101 0-15\n' + 
         'a=sendrecv\n' ;
 
-    siprequest('sip:1234@localhost:59886',{
+    siprequest('sip:234@localhost:5060',{
         headers:{
             'content-type': 'application/sdp'
+            ,supported: '100rel'
+            ,require: '100rel'
         },
         body: sdp
     }, function( err, req, res ) {
