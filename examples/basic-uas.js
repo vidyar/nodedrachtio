@@ -15,17 +15,10 @@ app.invite(function(req, res) {
    req.cancel(function(creq, cres){
         debug('caller hung up before answer') ;
     }) ;
-        
-	res.send(183, {
-        headers: {
-            'Content-Type': 'application/sdp'
-            ,'Require': '100rel'
-        }
-        ,body: d.sdp
-    }, function( prack, dlg ) {
 
-        debug('received PRACK, now we can send 200 OK to the INVITE') ;
-        debug('dialog after PRACK: ', dlg) ;
+    req.prack(function(prack, earlyDialog){
+        debug('got prack: ', prack) ;
+        debug('early dialog: ', earlyDialog) ;
 
         res.send(200, {
             headers: {
@@ -46,9 +39,16 @@ app.invite(function(req, res) {
 
             setTimeout(function(){
                 dlg.request('bye') ;
-            }, 5000); 
-           
+            }, 5000);        
         });
+   }) ;
+        
+	res.send(183, {
+        headers: {
+            'Content-Type': 'application/sdp'
+            ,'Require': '100rel'
+        }
+        ,body: d.sdp
     }) ;
 }) ;
 
