@@ -17,14 +17,12 @@ app.invite(function(req, res) {
     }) ;
 
     req.prack(function(prack, earlyDialog){
-        debug('got prack: ', prack) ;
-        debug('early dialog: ', earlyDialog) ;
 
         res.send(200, {
             headers: {
                 'Content-Type': 'application/sdp'
             }
-            ,body: d.sdp
+            ,body: d.dummySdp
         }, function( err, ack, dlg ) {
 
             if( err ) {
@@ -48,7 +46,7 @@ app.invite(function(req, res) {
             'Content-Type': 'application/sdp'
             ,'Require': '100rel'
         }
-        ,body: d.sdp
+        ,body: d.dummySdp
     }) ;
 }) ;
 

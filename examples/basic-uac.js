@@ -42,18 +42,13 @@ app.once('connect', function() {
         }
 
         if( res.statusCode === 200 ) {
-
             res.ack(function(err, dlg) {
-
                 if( err ) {
                     console.error('error sending ack: ' + err ) ;
                     app.disconnect() ;
+                    return ;
                 }
-                else {
-
-                    dlg.bye( onDialogBye ) ;
-
-                }
+                dlg.bye( onDialogBye ) ;
              }) ;
         }
     }) ;
@@ -62,6 +57,7 @@ app.once('connect', function() {
 function onDialogBye( req, res ) {
     debug('called party hung up') ;
     res.send(200) ;
+    app.disconnect() ;
 }
 
 
