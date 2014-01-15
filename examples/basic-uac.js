@@ -26,7 +26,7 @@ app.once('connect', function() {
         'a=fmtp:101 0-15\n' + 
         'a=sendrecv\n' ;
 
-    siprequest('sip:234@localhost:5060',{
+    siprequest('sip:234@127.0.0.1:5060',{
         headers:{
             'content-type': 'application/sdp'
             ,supported: '100rel'
