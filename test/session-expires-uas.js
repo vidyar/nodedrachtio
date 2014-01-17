@@ -1,8 +1,8 @@
 var app = require('..')()
 ,siprequest = app.uac
 ,d = require('./fixtures/data')
-,config = require('./test-config')
-,debug = require('debug')('drachtio:example-basic-uac') ;
+,config = require('./fixtures/test-config')
+,debug = require('debug')('drachtio:session-expires-uas') ;
  
 app.connect( {
     host: 'localhost'
@@ -11,21 +11,11 @@ app.connect( {
 } ) ;
 
 app.invite(function(req, res) {
-
-   req.cancel(function(creq, cres){
-        debug('caller hung up before answer') ;
-    }) ;
         
-	req.active && res.send(183, {
-        headers: {
-            'Content-Type': 'application/sdp'
-        }
-        ,body: d.dummySdp
-    }) ;
-
     req.active && res.send(200, {
         headers: {
             'Content-Type': 'application/sdp'
+            'Session-Expires': '90; refresher=uac'
         }
         ,body: d.dummySdp
     }, function( err, ack, dlg ) {
@@ -38,9 +28,6 @@ app.invite(function(req, res) {
  
         dlg.bye(onDialogBye) ;
 
-        setTimeout(function(){
-            dlg.request('bye') ;
-        }, 5000);        
     });
 }) ;
 

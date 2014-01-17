@@ -1,7 +1,7 @@
 var app = require('..')()
 ,siprequest = app.uac
 ,config = require('./test-config')
-,debug = require('debug')('drachtio:example-basic-uac') ;
+,debug = require('debug')('drachtio:uac-100rel') ;
  
 app.connect( {
     host: 'localhost'
@@ -26,9 +26,14 @@ app.once('connect', function() {
         'a=fmtp:101 0-15\n' + 
         'a=sendrecv\n' ;
 
+    /* to do reliable provisional responses, just add appropriate Require header
+        drachtio will automatically generate the PRACK as needed, client does not need to
+    */
     siprequest('sip:234@127.0.0.1:5060',{
         headers:{
             'content-type': 'application/sdp'
+            ,supported: '100rel'
+            ,require: '100rel'
         },
         body: sdp
     }, function( err, req, res ) {
