@@ -14,8 +14,8 @@ app.invite(function(req, res) {
         
     req.active && res.send(200, {
         headers: {
-            'Content-Type': 'application/sdp'
-            'Session-Expires': '90; refresher=uac'
+            'content-type': 'application/sdp'
+            ,'session-expires': '90; refresher=uac'
         }
         ,body: d.dummySdp
     }, function( err, ack, dlg ) {

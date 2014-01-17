@@ -15,7 +15,7 @@ app.once('connect', function() {
     siprequest('sip:234@127.0.0.1:5060',{
         headers:{
             'content-type': 'application/sdp'
-            'session-expires': '90; refresher=uac'
+            ,'session-expires': '90; refresher=uac'
         },
         body: d.dummySdp
     }, function( err, req, res ) {
