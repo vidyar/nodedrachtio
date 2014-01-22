@@ -15,7 +15,7 @@ app.once('connect', function() {
     siprequest('sip:234@127.0.0.1:5060',{
         headers:{
             'content-type': 'application/sdp'
-            ,'session-expires': '90; refresher=uac'
+            ,'session-expires': '90; refresher=uas'
         },
         body: d.dummySdp
     }, function( err, req, res ) {
@@ -43,6 +43,14 @@ function onConnect( dlg ) {
 
     dlg.bye( onDialogBye ) ;
 
+    dlg.on('refresh', function() {
+        debug('dialog was refreshed') ;
+    })
+    .on('terminate', function(reason) {
+        debug('dialog terminated due to reason: ', %s) ;
+        app.disconnect() ;
+    }) ;
+
     setTimeout( function() {
         dlg.request('bye') ;
     }, 100 * 1000);
@@ -50,7 +58,6 @@ function onConnect( dlg ) {
 }
 function onDialogBye( req, res ) {
     debug('called party hung up') ;
-    app.disconnect() ;
 }
 
 

@@ -15,7 +15,7 @@ app.invite(function(req, res) {
     req.active && res.send(200, {
         headers: {
             'content-type': 'application/sdp'
-            ,'session-expires': '90; refresher=uac'
+            ,'session-expires': '90; refresher=uas'
         }
         ,body: d.dummySdp
     }, function( err, ack, dlg ) {
@@ -25,9 +25,13 @@ app.invite(function(req, res) {
             app.disconnect() ;
             return ;
         }
- 
-        dlg.bye(onDialogBye) ;
-
+        dlg.on('refresh', function() {
+            debug('dialog was refreshed') ;
+        })
+        .on('terminate', function(reason) {
+            debug('dialog was terminated due to %s', reason) ;
+            app.disconnect() ;
+        }) ;
     });
 }) ;
 
