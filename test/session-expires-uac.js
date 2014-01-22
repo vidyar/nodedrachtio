@@ -47,7 +47,7 @@ function onConnect( dlg ) {
         debug('dialog was refreshed') ;
     })
     .on('terminate', function(reason) {
-        debug('dialog terminated due to reason: ', %s) ;
+        debug('dialog terminated due to reason: %s', reason) ;
         app.disconnect() ;
     }) ;
 
