@@ -36,12 +36,6 @@ app.invite(function(req, res) {
 }) ;
 
 
-function onDialogBye( req, res ) {
-    debug('caller hungup') ;
-    res.send(200) ;
-}
-
-
 
 
 
