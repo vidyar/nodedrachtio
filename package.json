@@ -1,5 +1,5 @@
 {
-  "name": "drachtio-connect",
+  "name": "drachtio",
   "description": "Node library for drachtio sip user agent",
   "version": "0.1.0",
   "author": "Dave Horton <dave@dchorton.com>",
@@ -11,6 +11,7 @@
     ,"json-socket": "*"
     ,"pause": "0.0.1"
     ,"bytes": "0.2.1"
+    ,"drachtio-redis": ">=1.0.0"
   },
   "engines": { "node": "*" }
 }
