@@ -11,7 +11,7 @@
     ,"json-socket": "*"
     ,"pause": "0.0.1"
     ,"bytes": "0.2.1"
-    ,"drachtio-redis": ">=1.0.0"
+    ,"drachtio-redis": "*"
   },
-  "engines": { "node": "*" }
+  "engines": { "node": ">=0.10" }
 }
