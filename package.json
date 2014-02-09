@@ -1,7 +1,7 @@
 {
   "name": "drachtio",
   "description": "Node library for drachtio sip user agent",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "author": "Dave Horton <dave@dchorton.com>",
   "main": "./lib/drachtio.js",
   "dependencies": { 
@@ -11,7 +11,10 @@
     ,"json-socket": "*"
     ,"pause": "0.0.1"
     ,"bytes": "0.2.1"
-    ,"drachtio-redis": "*"
+  },
+  "devDependencies": {
+    "drachtio-redis": "*",
+    "jsdoc": ">=3.3.0-*"
   },
   "engines": { "node": ">=0.10" }
 }
