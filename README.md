@@ -112,6 +112,55 @@ app.uac('sip:1234@192.168.173.139', function( err, req, res ) {
 
 ```
 
+## Canceling a request
+
+To cancel a sip INVITE that has been sent by the application, use the 'cancelRequest' method on the request object that is returned from the 'uac' method, as shown below.
+
+```js
+var request = siprequest('sip:234@127.0.0.1:5060',{
+    headers:{
+        'content-type': 'application/sdp'
+    },
+    body: sdp
+}, function( err, req, res ) {
+
+    if( err ) throw( err ) ;
+    if( res.statusCode === 200 ) {
+        res.ack() ;
+    }
+}) ;
+
+//cancel the request 1 second after sending it
+setTimeout( function() {
+    request.cancelRequest() ;
+}, 1000) ;
+```
+
+On the other hand, when receiving an INVITE request, the application can check req.active to determine whether or not the INVITE request has been canceled (in which case, req.active will be false).  Additionally, if the application specifically wants to attach a handler that will be invoked when a CANCEL is received, the 'req.cancel' method should be used.
+
+> Note: the application does not need to send a response to the CANCEL request; the drachtio-server will already have generated a 200 OK response.
+
+```js
+app.invite(function(req, res) {
+
+    res.send(180) ;
+
+    //....time passes
+
+    req.active && res.send(200, {
+        headers: {
+            'content-type': 'application/sdp'
+        }
+        ,body: d.dummySdp
+    }) ;
+
+    req.cancel( function( req, res ){
+        debug('request was canceled by sender')
+    }) ;
+}) ;
+
+``` 
+
 ## Middleware
 
 
@@ -199,7 +248,7 @@ app.on('sipdialog:create', function(e) {
 .on('sipdialog:terminate', function(e) {
     var dialog = e.target ;
     
-    debug('dialog was terminated due to %s', e.reason ) ;
+    console.log('dialog was terminated due to ' + e.reason ) ;
 }) ;
 
 ```
