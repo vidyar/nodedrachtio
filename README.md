@@ -1,9 +1,9 @@
 # drachtio [![Build Status](https://secure.travis-ci.org/davehorton/drachtio.png)](http://travis-ci.org/davehorton/drachtio) [![Gittip](http://img.shields.io/gittip/davehorton.png)](https://www.gittip.com/davehorton/)
-<sub><sup>All tips go to support good causes in Pembrokeshire, Wales, where this code was born.  Iechyd da!</sup></sub>
+<sub><sup>200% of tips will go to support good causes in beautiful, rural Pembrokeshire, Wales, where this code was born.  Iechyd da !!</sup></sub>
 
 [![drachtio logo](http://www.dracht.io/images/definition_only-cropped.png)](http://dracht.io/)
 
-drachtio is an application framework designed to let developers easily integrate [SIP](http://www.ietf.org/rfc/rfc3261.txt) call and media processing features into their applications.  It acts as a client to the [drachtio-server](https://github.com/davehorton/drachtio-server) server platform, and offers [express](http://expressjs.com/)-style middleware for managing SIP requests.
+drachtio is an [express](http://expressjs.com/)-style application framework designed to let developers easily integrate [SIP](http://www.ietf.org/rfc/rfc3261.txt) call and media processing features into their applications.  It acts as a client to the [drachtio-server](https://github.com/davehorton/drachtio-server) server platform, and offers middleware and other features that make it easy to integrate VoIP into web applications.
 
 ```js
 var drachtio = require('drachtio') ;
