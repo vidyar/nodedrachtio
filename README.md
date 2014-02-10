@@ -1,5 +1,5 @@
 # drachtio [![Build Status](https://secure.travis-ci.org/davehorton/drachtio.png)](http://travis-ci.org/davehorton/drachtio) [![Gittip](http://img.shields.io/gittip/davehorton.png)](https://www.gittip.com/davehorton/)
-<sub><sup>All tips go to support good causes in Pembrokeshire, Wales, where this code was born and took its first toddling steps.  Iechyd da!</sup></sub>
+<sub><sup>All tips go to support good causes in Pembrokeshire, Wales, where this code was born.  Iechyd da!</sup></sub>
 
 [![drachtio logo](http://www.dracht.io/images/definition_only-cropped.png)](http://dracht.io/)
 
@@ -170,7 +170,7 @@ app.invite(function(req, res) {
 
 ## Reliable provisional responses
 
-To send an INVITE with reliable provisional responses, simply add a `Require: 100rel` header to the INVITE request.
+OK, so you want to send an INVITE and receive reliable provisional responses.  Easy, just add a `Require: 100rel` header to the INVITE request.
 
 ```js
     app.uac('sip:234@127.0.0.1:5060',{
@@ -185,11 +185,13 @@ To send an INVITE with reliable provisional responses, simply add a `Require: 10
     }) ;
 ```
 
-> Note that if you want to use reliable provisional responses only if the remote side supports them, then include a `Supported` header but not a `Require` header.
+> Note that if you want to use reliable provisional responses if the remote side supports them, but establish the call without them if the remote side does not support it, then include a `Supported` header but do not include a `Require` header.
 
-Similiarly, to send reliable provisional responses when receiving an INVITE, simply add a `Require: 100rel` header.  Additionally, if you want to install a callback handler to be invoked when a PRACK message is received establishing the early sip dialog, use the `prack` method on the Request object.
+Similiarly, if you want to send reliable provisional responses, just add a `Require: 100rel` header in your response, and drachtio-server will handle sending reliable provisional response for you.  
 
-Finally, the `app` will emit a `sipdialog:create-early` event when an early dialog is created.
+And, if you want to install a callback handler to be invoked when the PRACK message is subsequently received, just call the `prack` method on the Request object.
+
+> Oh yeah, the `app` will emit a `sipdialog:create-early` event when an early dialog is created at the point where the PRACK is received.  This will allow your app to play a prompt over an early connection without propogating answer supervision, for instance.
 
 ```js
 app.invite(function(req, res) {
@@ -220,7 +222,7 @@ app.on('sipdialog:create-early', function(e) {
 
 ```
 ### Custom headers
-You've already seen how to add sip headers to a request message. You're not restricted to the industry-standard headers, you can make up your own custom header if you need to.
+You've already seen how to add sip headers to a request message, but how about custom headers? You're not restricted to the industry-standard headers, you can make up your own wacky custom headers if you need to.
 ```js
 app.invite(function(req, res) {
     res.send( 500, 'Internal Server Error - Database down',{
@@ -230,6 +232,8 @@ app.invite(function(req, res) {
     }) ;
 }) ;
 ```
+> Custom headers don't need to start with "X-", though that is pretty common practice.
+
 On the other hand, there are some headers that you **can't** change.  For instance, the `Call-ID` header can't be changed, since this would potentially break the sip messaging.  If you try to set one of these headers, your attempted header value will be silently discarded (though you will see a warning in the drachtio-server log file).
 
 ## Middleware
