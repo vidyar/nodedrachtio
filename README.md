@@ -16,7 +16,7 @@ app.use( app.router ) ;
 app.invite( function( req, res ) {
     res.send(486, {
         headers: {
-            'user-agent': 'Drachtio rocksz - but he's busy right now!
+            'user-agent': "Drachtio rocksz - but he's busy right now!"
         }
     }) ;
 }) ;
