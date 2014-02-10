@@ -1,8 +1,6 @@
-# drachtio
+# drachtio [![Build Status](https://secure.travis-ci.org/davehorton/drachtio.png)](http://travis-ci.org/davehorton/drachtio)
 
 [![drachtio logo](http://www.dracht.io/images/definition_only.png)](http://dracht.io/)
-
-[![Build Status](https://secure.travis-ci.org/davehorton/drachtio.png)](http://travis-ci.org/davehorton/drachtio)
 
 drachtio is an application framework designed to let developers easily integrate [SIP](http://www.ietf.org/rfc/rfc3261.txt) call and media processing features into their applications.  It acts as a client to the [dractio](https://github.com/davehorton/drachtio) server platform, and offers [express](http://expressjs.com/)-style middleware for managing SIP requests.
 
