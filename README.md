@@ -15,7 +15,7 @@ app.use( app.router ) ;
 app.invite( function( req, res ) {
     res.send(486, {
         headers: {
-            'user-agent': 'Drachtio rocksz'
+            'user-agent': 'Drachtio rocksz - but he's busy right now!
         }
     }) ;
 }) ;
@@ -97,7 +97,13 @@ Sip INVITE messages have the additional feature of being concluded with an sip A
 > When sending an INVITE request, as a convenience the 'uac' method can be used.
 
 ```js
-app.uac('sip:1234@192.168.173.139', function( err, req, res ) {
+var drachtio = require('drachtio') ;
+var app = drachtio() 
+siprequest = app.uac ;
+
+app.connect({host:'localhost', port: 8022, secret: 'cymru'}) ;
+
+siprequest('sip:1234@192.168.173.139', function( err, req, res ) {
     if( err ) throw( err ) ;
 
     if( res.statusCode === 200 ) {
@@ -212,27 +218,47 @@ app.on('sipdialog:create-early', function(e) {
 }) ;
 
 ```
+### Custom headers
+You've already seen how to add sip headers to a request message. You're not restricted to the industry-standard headers, you can make up your own custom header if you need to.
+```js
+app.invite(function(req, res) {
+    res.send( 500, 'Internal Server Error - Database down',{
+        headers: {
+            'X-My-Special-thingy': 'isnt my custom header shiny pretty?'
+        }
+    }) ;
+}) ;
+```
+On the other hand, there are some headers that you **can't** change.  For instance, the `Call-ID` header can't be changed, since this would potentially break the sip messaging.  If you try to set one of these headers, your attempted header value will be silently discarded (though you will see a warning in the drachtio-server log file).
+
 ## Middleware
 
 
 Express-style middleware can be used to intercept and filter messages.  Middleware is installed using the 'use' method of the app object, as we have seen earlier with the app.router middleware, which must always be installed in order to access the app[verb] methods.  
 
-Additional middleware can be installed in a similar fashion.  Middleware functions should have an arity of 3 (req, res, next), unless they are error-handling callback methods, in which case the signature should be (err, req, res, next)
+Additional middleware can be installed in a similar fashion.  Middleware functions should have an arity of 3 (req, res, next), unless they are error-handling callback methods, in which case the signature should be (err, req, res, next).
 
 ```js
 app.use( function( req, res, next ) {
     /* reject all messages except from one ip address */
-    if( req.signaling_address === '192.168.1.52' ) next() ;
+    if( req.signaling_address !== '192.168.1.52' ) return res.send(403) ; 
+    next() ;
 })
+app.use( app.router ) ;
 ```
-Middleware can also be invoked only for one type of request
+Middleware can also be invoked only for one type of request, instead of processing every message.
 ```js
 app.use('register', drachtio.digestAuth('dracht.io', function( realm, user, fn) {
     //here we simply return 'foobar' as password; real-world we'd hit a database or something..
     fn( null, 'foobar') ;
 })) ;
 ```
-
+or only for responses:
+```js
+app.use('response', function(req, res, next) {
+    //...e.g. perhaps I want to examine and log response status codes here
+ )) ;
+```
 ## Session state
 
 Middleware can also used to install session state that can be accessed through req.session.  
