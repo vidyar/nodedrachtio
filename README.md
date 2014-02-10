@@ -1,4 +1,4 @@
-# drachtio [![Build Status](https://secure.travis-ci.org/davehorton/drachtio.png)](http://travis-ci.org/davehorton/drachtio)
+# drachtio [![Build Status](https://secure.travis-ci.org/davehorton/drachtio.png)](http://travis-ci.org/davehorton/drachtio) [![Gittip](http://img.shields.io/gittip/davehorton.png)](https://www.gittip.com/davehorton/)
 
 [![drachtio logo](http://www.dracht.io/images/definition_only.png)](http://dracht.io/)
 
