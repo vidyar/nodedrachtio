@@ -1,5 +1,7 @@
 # drachtio
 
+[![drachtio logo](http://www.dracht.io/images/definition_only.png)](http://dracht.io/)
+
 [![Build Status](https://secure.travis-ci.org/davehorton/drachtio.png)](http://travis-ci.org/davehorton/drachtio)
 
 drachtio is an application framework designed to let developers easily integrate [SIP](http://www.ietf.org/rfc/rfc3261.txt) call and media processing features into their applications.  It acts as a client to the [dractio](https://github.com/davehorton/drachtio) server platform, and offers [express](http://expressjs.com/)-style middleware for managing SIP requests.
@@ -117,7 +119,7 @@ app.uac('sip:1234@192.168.173.139', function( err, req, res ) {
 To cancel a sip INVITE that has been sent by the application, use the `cancelRequest` method on the request object that is returned from the `uac` method, as shown below.
 
 ```js
-var request = siprequest('sip:234@127.0.0.1:5060',{
+var request = app.uac('sip:234@127.0.0.1:5060',{
     headers:{
         'content-type': 'application/sdp'
     },
@@ -151,7 +153,7 @@ app.invite(function(req, res) {
         headers: {
             'content-type': 'application/sdp'
         }
-        ,body: d.dummySdp
+        ,body: localSdp
     }) ;
 
     req.cancel( function( req, res ){
