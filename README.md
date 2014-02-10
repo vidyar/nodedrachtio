@@ -260,10 +260,9 @@ app.use('response', function(req, res, next) {
  )) ;
 ```
 ## Session state
-
 Middleware can also used to install session state that can be accessed through req.session.  
 ```js
-var drachtio = require('..')
+var drachtio = require('drachtio')
 var app = drachtio()
 var RedisStore = require('drachtio-redis')(drachtio) ;
 
@@ -289,13 +288,11 @@ app.invite(function(req, res) {
 app.bye( function(req, res){
     console.log('user is ' + req.session.user) ;
 })
-
 ```
-
 ## Sip dialog support
-Sip dialogs provide an optional, higher level of abtraction.  Using sip dialogs requires using session state, as dialogs are automatically persisted to session state. Sip dialogs are installed using the drachtio.dialog middleware.
+Sip dialogs provide an optional, higher level of abtraction.  Using sip dialogs requires using session state, as dialogs are automatically persisted to session state. Sip dialogs are installed using the drachtio.dialog middleware function.
 ```js
-var drachtio = require('..')
+var drachtio = require('drachtio')
 var app = drachtio()
 var RedisStore = require('drachtio-redis')(drachtio) 
 
