@@ -1,5 +1,10 @@
-# drachtio [![Build Status](https://secure.travis-ci.org/davehorton/drachtio.png)](http://travis-ci.org/davehorton/drachtio) [![Gittip](http://img.shields.io/gittip/davehorton.png)](https://www.gittip.com/davehorton/)
-<sub><sup>200% of tips will go to support good causes in beautiful, rural Pembrokeshire, Wales, where this code was born.  Iechyd da !!</sup></sub>
+# drachtio [![Build Status](https://secure.travis-ci.org/davehorton/drachtio.png)](http://travis-ci.org/davehorton/drachtio)
+
+<!-- [![Gittip](http://img.shields.io/gittip/davehorton.png)](https://www.gittip.com/davehorton/)
+
+<sub><sup>All tips will go to support the good causes and great people of
+ beautiful, rural Pembrokeshire, Wales, where this code was born.  Iechyd da !!</sup></sub>
+-->
 
 [![drachtio logo](http://www.dracht.io/images/definition_only-cropped.png)](http://dracht.io/)
 
