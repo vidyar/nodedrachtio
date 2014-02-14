@@ -34,7 +34,7 @@ app.once('connect', function() {
     siprequest('sip:234@127.0.0.1:5060',{
         headers:{
             'content-type': 'application/sdp'
-            'supported': '100rel'
+            ,'supported': '100rel'
             ,'require': '100rel'
         },
         body: sdp
