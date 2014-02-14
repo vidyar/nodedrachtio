@@ -41,11 +41,11 @@ app.invite(function(req, res) {
 
         res.send( uacRes.statusCode, {
             headers: {
-                'content-type', uacRes.get('content-type')
+                'content-type': uacRes.get('content-type')
             }
-            uacRes.body
+            ,body: uacRes.body
         }) ;
-    }) ;)
+    }) ;
 }) ;
 
 app.on('sipdialog:create', function(e) {
