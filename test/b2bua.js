@@ -51,15 +51,14 @@ app.invite(function(req, res) {
 }) ;
 
 app.on('sipdialog:create', function(e) {
-    debug('sipdialog:create handler') ;
-
     var dialog = e.target ;
 
+    debug('sipdialog:create handler for dialog with id %s', dialog.dialogID) ;
 })
 .on('sipdialog:terminate', function(e) {
     var dialog = e.target ;
     
-    debug('dialog with role %s was terminated due to %s', dialog.role, e.reason ) ;
+    debug('dialog with role %s and dialogID %s was terminated due to %s', dialog.role, dialog.dialogID, e.reason ) ;
 /*
     dialog.sessionStore.get( dialog.call_id, function( err, otherCallId){
         if( err ) throw( err ) ;
