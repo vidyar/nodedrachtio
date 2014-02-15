@@ -26,10 +26,12 @@ app.invite(function(req, res) {
         body: req.body
     }, function( err, invite, uacRes ) {
 
+        debug('received response to uac invite') ;
+
         if( err ) throw( err ) ;
 
+        /*
         if( !gotResponse ) {
-            /* save mapping between call ids */
             req.sessionStore.set( req.get('call_id'), {
                 otherCallId: invite.get('call_id')
             }) ;
@@ -38,7 +40,8 @@ app.invite(function(req, res) {
             }) ;
             gotResponse = true ;
         }
-
+        */
+        
         res.send( uacRes.statusCode, {
             headers: {
                 'content-type': uacRes.get('content-type')
