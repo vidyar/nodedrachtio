@@ -19,7 +19,7 @@ app.invite(function(req, res) {
 
     /* send new INVITE back to sender */
     var gotResponse = false ;
-    siprequest( req.get('contact'), {
+    siprequest( req.source_address + ':' + req.source_port, {
         headers:{
             'content-type': 'application/sdp'
         },
