@@ -26,8 +26,6 @@ app.invite(function(req, res) {
         body: req.body
     }, function( err, invite, uacRes ) {
 
-        debug('received response to uac invite with status code %d', uacRes.statusCode ) ;
-
         if( err ) throw( err ) ;
 
         /*
@@ -42,9 +40,10 @@ app.invite(function(req, res) {
         }
         */
 
+        debug('received response to uac invite with status code %d', uacRes.statusCode ) ;
         res.send( uacRes.statusCode, {
             headers: {
-                'content-type': uacRes.get('content-type')
+                'content-type': uacRes.get('content-type').type
             }
             ,body: uacRes.body
         }) ;
