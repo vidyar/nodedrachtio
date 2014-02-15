@@ -3,7 +3,7 @@ var drachtio = require('..')
 ,siprequest = app.uac
 ,RedisStore = require('drachtio-redis')(drachtio) 
 ,d = require('./fixtures/data')
-,debug = require('debug')('drachtio:session-expires-uas') ;
+,debug = require('debug')('drachtio:b2bua') ;
 
 app.connect({
     host: 'localhost'
@@ -26,7 +26,7 @@ app.invite(function(req, res) {
         body: req.body
     }, function( err, invite, uacRes ) {
 
-        debug('received response to uac invite') ;
+        debug('received response to uac invite with status code %d', uacRes.statusCode ) ;
 
         if( err ) throw( err ) ;
 
@@ -41,7 +41,7 @@ app.invite(function(req, res) {
             gotResponse = true ;
         }
         */
-        
+
         res.send( uacRes.statusCode, {
             headers: {
                 'content-type': uacRes.get('content-type')
@@ -61,7 +61,7 @@ app.on('sipdialog:create', function(e) {
     var dialog = e.target ;
     
     debug('dialog with role %s was terminated due to %s', dialog.role, e.reason ) ;
-
+/*
     dialog.sessionStore.get( dialog.call_id, function( err, otherCallId){
         if( err ) throw( err ) ;
         debug('matching callid we need to send BYE on is %s', otherCallId) ;
@@ -73,6 +73,7 @@ app.on('sipdialog:create', function(e) {
             dlg.terminate() ;
         })
     })
+*/
 }) ;
 
 
