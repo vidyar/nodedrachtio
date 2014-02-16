@@ -26,7 +26,7 @@ app.invite( function( req, res ) {
     }) ;
 }) ;
 ```
-
+More information about the drachtio architecture can be found [here](docs/architecture.md)
 ## Connecting to the server
 
 Since the sip transport is implemented by drachtio-server, a connection must be established to a drachtio-server in order to control the sip messaging.  The drachtio-server process listens by default on TCP port 8022 for connections from drachtio applications.
