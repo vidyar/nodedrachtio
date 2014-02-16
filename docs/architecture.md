@@ -1,1 +1,7 @@
 # Drachtio architecture
+
+Drachtio is designed to make it easy for developers to integrate Voice-over IP (VoIP) features into their web applications, or to simply build full-on next generation VoIP applications.  It couples an easy-to-use [express](http://expressjs.com/)-style web application framework with a high-performance [SIP](http://www.ietf.org/rfc/rfc3261.txt) processing engine that is built on the [sofia SIP stack](https://gitorious.org/sofia-sip).  
+
+Drachtio consists of a client and a server component.  The server component is [drachtio-server](https://github.com/davehorton/drachtio-server) - a minimal, high-performance sip agent process which contains no application logic, but provides a SIP endpoint that can be controlled by one or more clients that exchange [JSON](http://www.json.org) messages with the server over a TCP network connection.  The drachtio-server is written in C++ and designed to run as a daemon process, which may be remote or co-located with a drachtio application.
+
+The client component is drachtio (i.e., this project), which is a node.js module that enables node applications to receive or make SIP calls, handle SIP registrations, and perform any other type of SIP call control by connecting to a drachtio-server](https://github.com/davehorton/drachtio-server) instance.  

@@ -345,9 +345,10 @@ app.invite(function(req, res) {
 	console.log('calling party number on the incoming INVITE is ' + req.get('from').url.user) ;
 ```
 
-## Documentation
+## Further Documentation
 
-TBD
+- Architecture overview
+- API
 
 
 
