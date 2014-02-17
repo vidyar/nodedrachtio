@@ -347,8 +347,9 @@ app.invite(function(req, res) {
 
 ## Further Documentation
 
-- Architecture overview
-- API
+- [Architecture overview](docs/architecture.md)
+- [API](docs/api.md)
+- [drachtio-msml](https://github.com/davehorton/drachtio-msml)
 
 
 

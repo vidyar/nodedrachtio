@@ -115,6 +115,17 @@ app.on('sipdialog:create', function(e) {
     console.log('dialog user is: %s', dialog.session.user) ;
 }) ;
 ```
+## Related projects
+
+### [drachtio-msml](https://github.com/davehorton/drachtio-msml)
+drachtio-msml provides middleware that allows application developers to incorporate audio and video features of IP media servers that support [MSML](http://en.wikipedia.org/wiki/MSML) (Media Server Markup Language).
+
+### [drachtio-middleware](https://github.com/davehorton/drachtio-middleware)
+drachtio-middleware is a repository of common middleware that can be used in drachtio applications.
+
+### [drachtio-redis](https://github.com/davehorton/drachtio-redis)
+drachtio-redis is a Redis client for drachtio applications, enabling the use of the Redis key-value store to store drachtio dialogs and application session state. 
+
 ## Managing session state
 The example above introduced the concept of session state.  Session state refers to application content that relates to one SIP dialog (or associated set of SIP dialogs) which needs to be persisted between different javascript callback functions.  This is analagous to web applications, which need to maintain session state (e.g., a shopping cart) between different http requests.  
 
