@@ -345,11 +345,13 @@ app.invite(function(req, res) {
 	console.log('calling party number on the incoming INVITE is ' + req.get('from').url.user) ;
 ```
 
-## Further Documentation
+## Additional Documentation
 
 - [Architecture overview](docs/architecture.md)
 - [API](docs/api.md)
 - [drachtio-msml](https://github.com/davehorton/drachtio-msml)
+- [drachtio-middleware](https://github.com/davehorton/drachtio-middleware)
+- [drachtio-redis](https://github.com/davehorton/drachtio-redis)
 
 
 
