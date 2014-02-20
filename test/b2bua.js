@@ -12,11 +12,12 @@ app.connect({
 }) ;
 
 app.use( drachtio.session({store: new RedisStore({host: 'localhost'}) }) ) ;
-app.use( drachtio.dialog() ) ;
+app.use( drachtio.dialog({autosave: false}) ) ;
 app.use( app.router ) ;
 
 app.invite(function(req, res) {
 
+    req.session.startTime = new Date() ;
     /* send new INVITE back to sender */
     var gotResponse = false ;
     siprequest( req.msg.source_address + ':' + req.msg.source_port, {
@@ -27,18 +28,6 @@ app.invite(function(req, res) {
     }, function( err, invite, uacRes ) {
 
         if( err ) throw( err ) ;
-
-        /*
-        if( !gotResponse ) {
-            req.sessionStore.set( req.get('call_id'), {
-                otherCallId: invite.get('call_id')
-            }) ;
-            req.sessionStore.set( invite.get('call_id'), {
-                otherCallId: rqe.get('call_id')
-            }) ;
-            gotResponse = true ;
-        }
-        */
 
         debug('received response to uac invite with status code %d', uacRes.statusCode ) ;
         res.send( uacRes.statusCode, {
@@ -52,26 +41,29 @@ app.invite(function(req, res) {
 
 app.on('sipdialog:create', function(e) {
     var dialog = e.target ;
+    var session = e.session ;
+
+    session[dialog.role === SipDialog.UAC ? 'uacLeg': 'uasLeg'] = dialog ;
+    session.username = 'daveh' ;
+    e.sessionSave() ;
 
     debug('sipdialog:create handler for dialog with id %s', dialog.dialogID) ;
 })
 .on('sipdialog:terminate', function(e) {
     var dialog = e.target ;
+    var session = e.session ;
+
+    debug('release came on %s dialog', dialog.role ) ;
+    if( dialog.role === SipDialog.UAS ) {
+        session.uacLeg.terminate() ;
+    }
+    else {
+        session.uasLeg.terminate() ;
+    }
+
+    var duration = new Date() - session.startTime() ;
     
     debug('dialog with role %s and dialogID %s was terminated due to %s', dialog.role, dialog.dialogID, e.reason ) ;
-/*
-    dialog.sessionStore.get( dialog.call_id, function( err, otherCallId){
-        if( err ) throw( err ) ;
-        debug('matching callid we need to send BYE on is %s', otherCallId) ;
-
-        SipDialog.loadFromSessionStore( dialog.sessionStore, otherCallId, dialog.role === 'uac' ? 'uas': 'uac', function( err, dlg){
-            if( err ) throw( err ) ;
-
-            debug('terminating dialog ', dlg) ;
-            dlg.terminate() ;
-        })
-    })
-*/
 }) ;
 
 
