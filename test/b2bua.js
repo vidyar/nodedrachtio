@@ -12,7 +12,7 @@ app.connect({
     ,secret: 'cymru'
 }) ;
 
-app.use( drachtio.session({store: new RedisStore({host: 'localhost'}, prefix:'') }) ) ;
+app.use( drachtio.session({store: new RedisStore({host: 'localhost', prefix:''})})) ;
 app.use( drachtio.dialog() ) ;
 app.use( app.router ) ;
 
