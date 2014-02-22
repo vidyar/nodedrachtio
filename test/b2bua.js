@@ -3,6 +3,7 @@ var drachtio = require('..')
 ,siprequest = app.uac
 ,RedisStore = require('drachtio-redis')(drachtio) 
 ,d = require('./fixtures/data')
+,SipDialog = drachtio.SipDialog 
 ,debug = require('debug')('drachtio:b2bua') ;
 
 app.connect({
@@ -11,20 +12,19 @@ app.connect({
     ,secret: 'cymru'
 }) ;
 
-app.use( drachtio.session({store: new RedisStore({host: 'localhost'}) }) ) ;
+app.use( drachtio.session({store: new RedisStore({host: 'localhost'}, prefix:'') }) ) ;
 app.use( drachtio.dialog() ) ;
 app.use( app.router ) ;
 
 app.invite(function(req, res) {
 
-    req.session.startTime = new Date() ;
-
     var gotResponse = false ;
-    siprequest( '209.251.49.158', {
+    siprequest( 'sip:msml@209.251.49.158', {
         headers:{
             'content-type': 'application/sdp'
-        },
-        body: req.body
+        }
+        ,body: req.body
+        ,mks: req.mks
     }, function( err, invite, uacRes ) {
 
         if( err ) throw( err ) ;
@@ -44,30 +44,29 @@ app.on('sipdialog:create', function(e) {
     var dialog = e.target ;
     var session = e.session ;
 
-    session[dialog.role === SipDialog.UAC ? 'uacLeg': 'uasLeg'] = dialog ;
-    session.username = 'daveh' ;
-    e.sessionSave() ;
-
-    debug('sipdialog:create handler for dialog with id %s', dialog.dialogID) ;
+    var isUAC = dialog.role === SipDialog.UAC  ;
+    if( isUAC ) {
+        debug('saving UAC dialog ') ;
+        session.uacLeg = dialog ;
+    }
+    else {
+        debug('saving UAS dialog') ;
+        session.uasLeg = dialog ;
+    }
+    e.saveSession() ;
 })
 .on('sipdialog:terminate', function(e) {
     var dialog = e.target ;
     var session = e.session ;
 
-    debug('release came on %s dialog', dialog.role ) ;
+    debug('dialog with role %s and dialogID %s was terminated due to %s', dialog.role, dialog.dialogID, e.reason ) ;
     if( dialog.role === SipDialog.UAS ) {
+        debug('sending bye to B leg') ;
         session.uacLeg.terminate() ;
     }
     else {
+        debug('sending bye to A leg') ;
         session.uasLeg.terminate() ;
     }
-
-    var duration = new Date() - session.startTime() ;
     
-    debug('dialog with role %s and dialogID %s was terminated due to %s', dialog.role, dialog.dialogID, e.reason ) ;
 }) ;
-
-
-
-
-
