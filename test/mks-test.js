@@ -31,10 +31,14 @@ Endpoint.prototype.hello = function() {debug('Endpoint says hello, this: ', this
 Endpoint.prefix = 'ep' ;
 
 var ep = new Endpoint( uuid.v1() ) ;
+
+debug('Endpoint is a Resource? ', ep instanceof Resource) ;
+return; 
+
 var ep2 = new Endpoint( uuid.v1() ) ;
 
-session.add( ep ) ;
-session.add( ep2 ) ;
+session.set( ep ) ;
+session.set( ep2 ) ;
 session.session = {
 	user: 'daveh'
 	,foo: 'bar'
