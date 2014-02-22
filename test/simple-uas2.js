@@ -2,7 +2,7 @@ var drachtio = require('..')
 ,app = drachtio()
 ,RedisStore = require('drachtio-redis')(drachtio) 
 ,d = require('./fixtures/data')
-,debug = require('debug')('drachtio:uas-delay-answer') ;
+,debug = require('debug')('drachtio:simple-uas2') ;
 
 app.connect({
     host: 'localhost'

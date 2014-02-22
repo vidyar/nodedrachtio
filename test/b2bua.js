@@ -12,15 +12,15 @@ app.connect({
 }) ;
 
 app.use( drachtio.session({store: new RedisStore({host: 'localhost'}) }) ) ;
-app.use( drachtio.dialog({autosave: false}) ) ;
+app.use( drachtio.dialog() ) ;
 app.use( app.router ) ;
 
 app.invite(function(req, res) {
 
     req.session.startTime = new Date() ;
-    /* send new INVITE back to sender */
+
     var gotResponse = false ;
-    siprequest( req.msg.source_address + ':' + req.msg.source_port, {
+    siprequest( '209.251.49.158', {
         headers:{
             'content-type': 'application/sdp'
         },
@@ -30,10 +30,11 @@ app.invite(function(req, res) {
         if( err ) throw( err ) ;
 
         debug('received response to uac invite with status code %d', uacRes.statusCode ) ;
+
+        var headers = {} ;
+        if( uacRes.statusCode === 200 ) headers['content-type'] = uacRes.get('content-type').type ;
         res.send( uacRes.statusCode, {
-            headers: {
-                'content-type': uacRes.get('content-type').type
-            }
+            headers: headers
             ,body: uacRes.body
         }) ;
     }) ;
