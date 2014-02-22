@@ -175,8 +175,7 @@ app.invite(function(req, res) {
 
 ## Reliable provisional responses
 
-OK, so you want to send an INVITE and receive reliable provisional responses.  Easy, just add a `Require: 100rel` header to the INVITE request.
-
+OK, so you want to send an INVITE and receive reliable provisional responses.  Easy, just add a `Require: 100rel` header to the INVITE request and drachtio-server will handle everything for you.
 ```js
     app.uac('sip:234@127.0.0.1:5060',{
         headers:{
@@ -189,15 +188,13 @@ OK, so you want to send an INVITE and receive reliable provisional responses.  E
         //..handle response
     }) ;
 ```
-
 > Note that if you want to use reliable provisional responses if the remote side supports them, but establish the call without them if the remote side does not support it, then include a `Supported` header but do not include a `Require` header.
 
 Similiarly, if you want to send reliable provisional responses, just add a `Require: 100rel` header in your response, and drachtio-server will handle sending reliable provisional response for you.  
 
 And, if you want to install a callback handler to be invoked when the PRACK message is subsequently received, just call the `prack` method on the Request object.
 
-> Oh yeah, the `app` will emit a `sipdialog:create-early` event when an early dialog is created at the point where the PRACK is received.  This will allow your app to play a prompt over an early connection without propogating answer supervision, for instance.
-
+> Oh yeah, the `app` will emit a `sipdialog:create-early` event when an early dialog is created at the point where the PRACK is received.  This will allow your app to do thinks like play a prompt over an early connection without propogating answer supervision, for instance.
 ```js
 app.invite(function(req, res) {
 
@@ -241,6 +238,30 @@ app.invite(function(req, res) {
 
 On the other hand, there are some headers that you **can't** change.  For instance, the `Call-ID` header can't be changed, since this would potentially break the sip messaging.  If you try to set one of these headers, your attempted header value will be silently discarded (though you will see a warning in the drachtio-server log file).
 
+## Back-to-back user agent (B2BUA)
+A B2BUA is a common sip pattern, where a sip application acts as both a User agent client (UAC) and a User agent server (UAS).  The application receives a sip INVITE (acting as an UAS) and then turns around and generates a new INVITE that offers the same session description protocol being offered in the incoming INVITE.  Most sip applications are written as a B2BUA because it offers a great degree of control over each SIP call leg.
+
+Creating a B2BUA is easy: in your `app.invite` handler, simply generate a sip request as shown above, and pipe the resulting object back into the response.
+```js
+app.invite(function(req, res) {
+    var b2bua = siprequest( 'sip:209.251.49.158', {
+        headers:{
+            'content-type': 'application/sdp'
+        }
+        ,body: req.body
+    }).pipe( res ) ;
+
+    b2bua.on('fail', function(status) {
+        debug('b2bua failed with status: ', status) ;
+    }) 
+    .on('success', function() {
+        debug('b2bua connected successfully') ;
+    }) ;
+}) ;
+// in the case of failure, the callback is passed an object 
+// representing the SIP status line on the response to the UAC INVITE, e.g
+//   { phrase: 'Not Implemented', status: 501, version: 'SIP/2.0' }
+```
 ## Middleware
 
 
