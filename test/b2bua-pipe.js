@@ -30,7 +30,7 @@ app.invite(function(req, res) {
     .on('fail', function(status) {
         debug('b2bua failed with status: ', status) ;
     }) 
-    .on('connect', function() {
+    .on('success', function() {
         debug('b2bua connected successfully') ;
     })
 }) ;
