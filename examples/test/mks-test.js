@@ -1,5 +1,5 @@
-var MKSession = require('../lib/middleware/session/multikeysession')
-drachtio = require('..')
+var MKSession = require('../../lib/middleware/session/multikeysession')
+drachtio = require('../..')
 ,RedisStore = require('drachtio-redis')(drachtio) 
 ,uuid = require('node-uuid')
 ,async = require('async')

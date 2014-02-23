@@ -1,4 +1,4 @@
-var drachtio = require('..')
+var drachtio = require('../..')
 ,app = drachtio()
 ,RedisStore = require('drachtio-redis')(drachtio) 
 ,siprequest = app.uac

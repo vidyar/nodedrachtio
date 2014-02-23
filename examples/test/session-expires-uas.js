@@ -1,7 +1,7 @@
-var app = require('..')()
+var app = require('../..')()
 ,siprequest = app.uac
-,d = require('./fixtures/data')
-,config = require('./fixtures/test-config')
+,d = require('../fixtures/data')
+,config = require('../fixtures/test-config')
 ,debug = require('debug')('drachtio:session-expires-uas') ;
  
 app.connect( {

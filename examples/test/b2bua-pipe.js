@@ -1,8 +1,8 @@
-var drachtio = require('..')
+var drachtio = require('../..')
 ,app = drachtio()
 ,siprequest = app.uac
 ,RedisStore = require('drachtio-redis')(drachtio) 
-,d = require('./fixtures/data')
+,d = require('../fixtures/data')
 ,SipDialog = drachtio.SipDialog 
 ,debug = require('debug')('drachtio:b2bua') ;
 

@@ -1,8 +1,8 @@
-var drachtio = require('..')
+var drachtio = require('../..')
 ,app = drachtio()
 ,Session = drachtio.MultiKeySession
 ,RedisStore = require('drachtio-redis')(drachtio) 
-,d = require('./fixtures/data')
+,d = require('../fixtures/data')
 ,debug = require('debug')('drachtio:session-data') ;
 
 app.connect({
