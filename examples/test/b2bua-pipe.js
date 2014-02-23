@@ -25,13 +25,10 @@ app.invite(function(req, res) {
         }
         ,body: req.body
     })
-    .pipe( res )
-    .on('fail', function(status) {
-        debug('b2bua failed with status: ', status) ;
-    }) 
-    .on('success', function() {
+    .pipe( res, function(err){
+        if( err ) return debug('b2bua failed with status: ', err) ;
         debug('b2bua connected successfully') ;
-    })
+    }) ;
 }) ;
 
 app.on('sipdialog:create', function(e) {
