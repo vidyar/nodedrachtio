@@ -24,7 +24,7 @@ app.invite(function(req, res) {
             'content-type': 'application/sdp'
         }
         ,body: req.body
-        ,mks: req.mks
+        ,session: req.session
     }, function( err, invite, uacRes ) {
 
         if( err ) throw( err ) ;
