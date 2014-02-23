@@ -31,8 +31,11 @@ app.invite(function(req, res) {
 
         debug('received response to uac invite with status code %d', uacRes.statusCode ) ;
 
+        if( uacRes.statusCode >= 200 ) uacRes.ack() ;
+
         var headers = {} ;
         if( uacRes.statusCode === 200 ) headers['content-type'] = uacRes.get('content-type').type ;
+        
         res.send( uacRes.statusCode, {
             headers: headers
             ,body: uacRes.body
