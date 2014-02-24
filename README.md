@@ -8,7 +8,9 @@
 
 [![drachtio logo](http://www.dracht.io/images/definition_only-cropped.png)](http://dracht.io/)
 
-drachtio is an [express](http://expressjs.com/)-style application framework designed to let developers easily integrate [SIP](http://www.ietf.org/rfc/rfc3261.txt) call and media processing features into their applications.  It acts as a client to the [drachtio-server](https://github.com/davehorton/drachtio-server) server platform, and offers middleware and other features that make it easy to integrate VoIP into web applications.
+drachtio is an [express](http://expressjs.com/)-style application framework designed to let developers easily integrate [SIP](http://www.ietf.org/rfc/rfc3261.txt) call and media processing features into their applications.  It acts as a client to the [drachtio-server](https://github.com/davehorton/drachtio-server) server platform, and offers middleware and other features that make it easy to integrate VoIP into web applications. 
+
+With drachtio as the core middleware-enabling framework, other projects like [drachtio-msml](https://github.com/davehorton/drachtio-msml) (and others to come!) can add in even *more* VoIP goodness for developers!.
 
 ```js
 var drachtio = require('drachtio') ;

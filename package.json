@@ -1,23 +1,25 @@
 {
-  "name": "drachtio",
-  "description": "Node library for drachtio sip user agent",
-  "version": "0.0.1",
-  "author": "Dave Horton <dave@dchorton.com>",
-  "main": "./lib/drachtio.js",
-  "dependencies": { 
+  "name": "drachtio"
+  ,"description": "express-style middleware for SIP telephony applications (http://www.ietf.org/rfc/rfc3261.txt)"
+  ,"version": "0.0.4"
+  ,"author": "Dave Horton <dave@dchorton.com>"
+  ,"main": "./lib/drachtio.js"
+  ,"dependencies": { 
     "debug": "*" 
-    ,"hat": "*"
     ,"underscore": "*"
     ,"json-socket": "*"
-    ,"pause": "0.0.1"
-    ,"bytes": "0.2.1"
     ,"node-uuid": ">=1.4.1"
     ,"async": ">=0.2.10"
     ,"crc": ">=0.2.1"
-  },
-  "devDependencies": {
-    "drachtio-redis": "*",
-    "jsdoc": ">=3.3.0-*"
+  }
+  ,"devDependencies": {
+    "drachtio-redis": "*"
+    ,"jsdoc": ">=3.3.0-*"
   },
   "engines": { "node": ">=0.10" }
+  ,"license": "MIT"
+  ,"repository": {
+    "type" :"git"
+    ,"url": "https://github.com/davehorton/drachtio"
+  }
 }
