@@ -19,7 +19,8 @@ app.use( app.router ) ;
 app.invite(function(req, res) {
 
     var gotResponse = false ;
-    siprequest( 'sip:msml@209.251.49.158', {
+//    siprequest( 'sip:msml@209.251.49.158', {
+    siprequest( 'sip:208.73.45.95', {
         headers:{
             'content-type': 'application/sdp'
         }
