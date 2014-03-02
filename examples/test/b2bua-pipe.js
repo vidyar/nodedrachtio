@@ -24,6 +24,7 @@ app.invite(function(req, res) {
             'content-type': 'application/sdp'
         }
         ,body: req.body
+        ,session: req.session
     })
     .pipe( res, function(err){
         if( err ) return debug('b2bua failed with status: ', err) ;
@@ -44,7 +45,7 @@ app.on('sipdialog:create', function(e) {
         debug('saving UAS dialog') ;
         session.uasLeg = dialog ;
     }
-    e.saveSession() ;
+    session.save() ;
 })
 .on('sipdialog:terminate', function(e) {
     var dialog = e.target ;
