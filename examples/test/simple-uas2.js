@@ -8,6 +8,7 @@ app.connect({
     host: 'localhost'
     ,port: 8022
     ,secret: 'cymru'
+    ,appName: 'uas'
 }) ;
 
 app.use( drachtio.session({store: new RedisStore({host: 'localhost', prefix:''}) }) ) ;
@@ -43,16 +44,12 @@ app.on('sipdialog:create', function(e) {
     debug('dialog was created, session: ', session) ;
 
     session.cdr.connect = new Date() ;
-
-    e.saveSession() ;
-}) ;
-
-
-app.on('sipdialog:terminate', function(e) {
+ })
+.on('sipdialog:terminate', function(e) {
    var dialog = e.target ;
     var session = e.session ;
 
-    debug('dialog was created, session: ', session) ;
+    debug('dialog was terminated, session: ', session) ;
 }) ;
 
 

@@ -6,11 +6,12 @@ var drachtio = require('../..')
  
 app.connect( {
     host: 'localhost'
-    ,port: 8023
+    ,port: 8022
     ,secret: 'cymru'
+    ,appName: 'uac'
 }) ;
 
-app.use( drachtio.session({store: new RedisStore({host: 'localhost'}) }) ) ;
+app.use( drachtio.session({store: new RedisStore({host: 'localhost', prefix:''})})) ;
 app.use( drachtio.dialog() ) ;
 app.use( app.router ) ;
 
@@ -31,7 +32,7 @@ app.once('connect', function() {
         'a=fmtp:101 0-15\n' + 
         'a=sendrecv\n' ;
 
-    siprequest('sip:234@127.0.0.1:5060',{
+    siprequest('sip:234@127.0.0.1:57448',{
         headers:{
             'content-type': 'application/sdp'
         },
@@ -44,25 +45,21 @@ app.once('connect', function() {
             return ;        
         }
 
-        if( res.statusCode === 200 ) {
+        if( res.statusCode >= 200 ) {
             res.ack() ;
         }
     }) ;
 }) ;
 
-
 app.on('sipdialog:create', function(e) {
     var dialog = e.target ;
+    e.session.user = 'daveh' ;
+    e.session.save() ;
     debug('uac dialog was created: ', dialog) ;
-    setTimeout( function() {
-        debug('time to send bye') ;
-        dialog.terminate() ;
-    }, 3000) ;
 })
 .on('sipdialog:terminate', function(e) {
     var dialog = e.target ;
     
-    debug('dialog was terminated due to %s', e.reason ) ;
- 
-    app.disconnect() ;
+    debug('dialog was terminated due to %s', e.reason ) ; 
+    debug('user is %s', e.session.user) ;
 }) ;

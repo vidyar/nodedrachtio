@@ -18,7 +18,6 @@ app.use( app.router ) ;
 
 app.invite(function(req, res) {
 
-    var gotResponse = false ;
     siprequest( 'sip:msml@209.251.49.158', {
         headers:{
             'content-type': 'application/sdp'
@@ -26,10 +25,7 @@ app.invite(function(req, res) {
         ,body: req.body
         ,session: req.session
     }, function( err, invite, uacRes ) {
-
         if( err ) throw( err ) ;
-
-        debug('received response to uac invite with status code %d', uacRes.statusCode ) ;
 
         if( uacRes.statusCode >= 200 ) uacRes.ack() ;
 
@@ -45,31 +41,9 @@ app.invite(function(req, res) {
 
 app.on('sipdialog:create', function(e) {
     var dialog = e.target ;
-    var session = e.session ;
-
-    var isUAC = dialog.role === SipDialog.UAC  ;
-    if( isUAC ) {
-        debug('saving UAC dialog ') ;
-        session.uacLeg = dialog ;
-    }
-    else {
-        debug('saving UAS dialog') ;
-        session.uasLeg = dialog ;
-    }
-    e.saveSession() ;
-})
+    e.session[ (dialog.role === SipDialog.UAC ? 'uacLeg' : 'uasLeg')] = dialog ;
+ )
 .on('sipdialog:terminate', function(e) {
-    var dialog = e.target ;
-    var session = e.session ;
-
-    debug('dialog with role %s and dialogID %s was terminated due to %s', dialog.role, dialog.dialogID, e.reason ) ;
-    if( dialog.role === SipDialog.UAS ) {
-        debug('sending bye to B leg') ;
-        session.uacLeg.terminate() ;
-    }
-    else {
-        debug('sending bye to A leg') ;
-        session.uasLeg.terminate() ;
-    }
-    
+    e.session.uacLeg && e.session.uacLeg.terminate() ;
+    e.session.uasLeg && e.session.uasLeg.terminate() ;
 }) ;
