@@ -17,7 +17,7 @@ app.use( drachtio.dialog() ) ;
 app.use( app.router ) ;
 
 app.invite(function(req, res) {
-    siprequest( req.source_address + ':' + req.source_port, {
+    siprequest( req.source_address + ':5060', {
         headers:{
             'content-type': 'application/sdp'
         }
