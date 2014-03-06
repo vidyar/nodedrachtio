@@ -20,6 +20,7 @@ app.invite(function(req, res) {
     siprequest( req.source_address + ':5060', {
         headers:{
             'content-type': 'application/sdp'
+            ,subject: req.get('call-id')
         }
         ,body: req.body
         ,session: req.session
