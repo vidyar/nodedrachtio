@@ -7,7 +7,7 @@ var drachtio = require('../..')
 ,debug = require('debug')('drachtio:b2bua') ;
 
 app.connect({
-    host: 'localhost'
+    host: '10.228.9.22'
     ,port: 8022
     ,secret: 'cymru'
 }) ;
@@ -33,6 +33,7 @@ app.invite(function(req, res) {
 app.on('sipdialog:create', function(e) {
     var dialog = e.target ;
     e.session[ (dialog.role === SipDialog.UAC ? 'uacLeg' : 'uasLeg')] = dialog ;
+    e.session.save() ;
  })
 .on('sipdialog:terminate', function(e) {
     var dialog = e.target ;
