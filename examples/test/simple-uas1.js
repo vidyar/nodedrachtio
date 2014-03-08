@@ -22,6 +22,7 @@ app.invite(function(req, res) {
             ,end: Object.create(null)
         }
     }
+    req.session.save() ;
 
     res.send(200, {
         headers: {

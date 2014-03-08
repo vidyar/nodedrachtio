@@ -44,6 +44,7 @@ app.on('sipdialog:create', function(e) {
     debug('dialog was created, session: ', session) ;
 
     session.cdr.connect = new Date() ;
+    session.save() ;
  })
 .on('sipdialog:terminate', function(e) {
    var dialog = e.target ;
