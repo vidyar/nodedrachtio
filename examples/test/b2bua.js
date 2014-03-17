@@ -19,10 +19,12 @@ app.use( app.router ) ;
 app.invite(function(req, res) {
 
     siprequest( 'sip:msml@209.251.49.158', {
-        headers:{
-            'content-type': 'application/sdp'
+        message: {
+            headers:{
+                'content-type': 'application/sdp'
+            }
+            ,body: req.body            
         }
-        ,body: req.body
         ,session: req.session
     }, function( err, invite, uacRes ) {
         if( err ) throw( err ) ;

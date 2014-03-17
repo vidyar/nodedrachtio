@@ -38,11 +38,14 @@ app.connect({
     host:'localhost'
     ,port: 8022
     ,secret: 'cymru'
+    ,appName: 'myApp'
 }, function( err, hostport ) {
     if( err ) console.err('failed to connect to drachtio-server: ' + err) ;
     else console.log('drachtio-server is listening for sip messages on ' + hostport) ;
 }) ;
 ```
+> `appName` is an optional parameter; if provided, it is used by drachtio-server to distribute the requests for a sip dialog across
+multiple running node instances of your application. 
 
 A 'connect' event is emitted by the app object when the connection has been established; alternatively, a callback can be passed to the connect method, as shown above.  
 
@@ -97,6 +100,8 @@ app.once('connect', function(err) {
 }) ;
 ```
 The callback receives a Request and Response: in this case, the Request describes the sip request that was sent while the Response describes the sip response that was received.
+
+The signature of the app.uac[verb] function is `(request_uri, opts, callback)`.  As shown in the example above, `opts` can be left out if there is no need to specify sip headers or body of the outgoing message.  
 
 ## ACK requests
 

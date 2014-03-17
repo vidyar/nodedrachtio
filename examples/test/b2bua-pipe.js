@@ -18,11 +18,13 @@ app.use( app.router ) ;
 
 app.invite(function(req, res) {
     siprequest( req.source_address + ':5060', {
-        headers:{
-            'content-type': 'application/sdp'
-            ,subject: req.get('call-id')
+        message: {
+            headers:{
+                'content-type': 'application/sdp'
+                ,subject: req.get('call-id')
+            }
+            ,body: req.body            
         }
-        ,body: req.body
         ,session: req.session
     })
     .pipe( res, function(err){
